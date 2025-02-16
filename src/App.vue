@@ -1,6 +1,7 @@
 <script setup>
 import { reactive } from 'vue';
 import Task from './components/Task.vue';
+import Filter from './components/Filter.vue';
 
 // Reactive for arrays and objects
 const tasks = reactive([
@@ -84,7 +85,6 @@ function toggleTaskStatus(id) {
 </script>
 
 <template>
-  <h1>Test</h1>
   <main class="container">
     <div class="header">
       <div class="header-side">
@@ -94,44 +94,17 @@ function toggleTaskStatus(id) {
       </div>
     </div>
 
-    <div class="filters">
-      <div>
-        <p>Filter by state</p>
-        <div class="badges">
-          <div class="badge">To-Do</div>
-          <div class="badge">Done</div>
-          <span class="clear"> x clear </span>
-        </div>
-      </div>
-    </div>
+    <Filter />
 
     <div class="tasks">
-      <Task
-      @toggleTaskStatus="toggleTaskStatus" 
-        v-for="(task, index) in tasks"
-        :task="task"
-        :key="index"
-      />
+      <Task @toggleTaskStatus="toggleTaskStatus" v-for="(task, index) in tasks" :task="task" :key="index" />
     </div>
 
     <div class="add-task">
       <h3>Add a new task</h3>
-      <input
-        type="text"
-        name="title"
-        v-model="newTask.name"
-        placeholder="Enter a title..."
-      /><br />
-      <textarea
-        v-model="newTask.description"
-        name="description"
-        rows="4"
-        placeholder="Enter a description..."
-      /><br />
-      <button
-        @click="addTask"
-        class="btn gray"
-      >
+      <input type="text" name="title" v-model="newTask.name" placeholder="Enter a title..." /><br />
+      <textarea v-model="newTask.description" name="description" rows="4" placeholder="Enter a description..." /><br />
+      <button @click="addTask" class="btn gray">
         Add Task
       </button>
     </div>
@@ -160,37 +133,6 @@ function toggleTaskStatus(id) {
     .secondary {
       margin-left: 12px;
     }
-  }
-}
-
-.filters {
-  display: flex;
-  flex-direction: column;
-  margin: 40px 0;
-
-  p {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 21px;
-    letter-spacing: 0em;
-    text-align: left;
-  }
-
-  .badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 14px 0;
-    align-items: center;
-  }
-
-  .clear {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 16px;
-    letter-spacing: 0em;
-    text-align: left;
-    cursor: pointer;
   }
 }
 

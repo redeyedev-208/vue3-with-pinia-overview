@@ -14,12 +14,8 @@ const props = defineProps(['task']);
       {{ task.description }}
     </p>
     <div class="task-check">
-      <input
-      @click="$emit('toggleTaskStatus', task.id)"
-        type="checkbox"
-        :checked="task.completed"
-      />
-      <label>{{ task.completed ? 'Done' : 'To-Do'}}</label>
+      <input @click="$emit('toggleTaskStatus', task.id)" type="checkbox" :checked="task.completed" />
+      <label>{{ task.completed ? 'Done' : 'To-Do' }}</label>
     </div>
   </div>
 </template>
