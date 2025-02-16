@@ -1,5 +1,6 @@
 <script setup>
 import { reactive } from 'vue';
+import Task from './components/Task.vue';
 
 // Reactive for arrays and objects
 const tasks = reactive([
@@ -8,38 +9,45 @@ const tasks = reactive([
     description:
       'Define the style guide, branding and create the webdesign on Figma.',
     completed: true,
+    id: 1
   },
   {
     name: 'Website development',
     description: 'Develop the portfolio website using Vue JS.',
     completed: false,
+    id: 2
   },
   {
     name: 'Hosting and infrastructure',
     description:
       'Define hosting, domain and infrastructure for the portfolio website.',
     completed: false,
+    id: 3
   },
   {
     name: 'Composition API',
     description:
       'Learn how to use the composition API and how it compares to the options API.',
     completed: true,
+    id: 4
   },
   {
     name: 'Pinia',
     description: 'Learn how to setup a store using Pinia.',
     completed: true,
+    id: 5
   },
   {
     name: 'Groceries',
     description: 'Buy rice, apples and potatos.',
     completed: false,
+    id: 6
   },
   {
     name: 'Bank account',
     description: 'Open a bank account for my freelance business.',
     completed: false,
+    id: 7
   },
 ]);
 
@@ -58,16 +66,25 @@ let newTask = { completed: false };
 
 function addTask() {
   if (newTask.name && newTask.description) {
+    newTask.id = Math.max(...tasks.map(task => task.id)) + 1;
     tasks.push(newTask);
-    newTask = {completed: false};
+    newTask = { completed: false };
   } else {
-    alert("Please enter title and description for the new task.")
+    alert('Please enter title and description for the new task.');
   }
-  
+}
+
+function toggleTaskStatus(id) {
+  tasks.forEach(task => {
+    if (task.id === id) {
+      task.completed = !task.completed;
+    }
+  })
 }
 </script>
 
 <template>
+  <h1>Test</h1>
   <main class="container">
     <div class="header">
       <div class="header-side">
@@ -89,25 +106,12 @@ function addTask() {
     </div>
 
     <div class="tasks">
-      <div
+      <Task
+      @toggleTaskStatus="toggleTaskStatus" 
         v-for="(task, index) in tasks"
+        :task="task"
         :key="index"
-        class="task"
-      >
-        <h3>
-          {{ task.name }}
-        </h3>
-        <p>
-          {{ task.description }}
-        </p>
-        <div class="task-check">
-          <input
-            type="checkbox"
-            :checked="task.completed"
-          />
-          <label> Done </label>
-        </div>
-      </div>
+      />
     </div>
 
     <div class="add-task">
@@ -124,12 +128,17 @@ function addTask() {
         rows="4"
         placeholder="Enter a description..."
       /><br />
-      <button @click="addTask" class="btn gray">Add Task</button>
+      <button
+        @click="addTask"
+        class="btn gray"
+      >
+        Add Task
+      </button>
     </div>
   </main>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .header {
   display: flex;
   justify-content: space-between;
@@ -192,80 +201,6 @@ function addTask() {
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(1, 1fr);
-  }
-}
-
-.task {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--white-color);
-  color: var(--black-color);
-  padding: 20px;
-  border-radius: 12px;
-  position: relative;
-
-  h3 {
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 21px;
-    letter-spacing: 0em;
-    text-align: left;
-  }
-
-  p {
-    margin-top: 24px;
-    margin-bottom: 12px;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 16px;
-    letter-spacing: 0em;
-    text-align: left;
-  }
-
-  .task-check {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-
-    label {
-      font-size: 13px;
-      font-weight: 400;
-      line-height: 16px;
-      letter-spacing: 0em;
-      text-align: left;
-      margin-left: 5px;
-      cursor: pointer;
-    }
-
-    input {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 18px;
-      height: 18px;
-      border-radius: 100%;
-      border: 0.77px solid #aeaeb2;
-      appearance: none;
-      cursor: pointer;
-
-      &:checked {
-        background-color: #0a7aff;
-        border-color: #0a7aff;
-
-        &::before {
-          content: '';
-          display: block;
-          width: 4.5px;
-          height: 9px;
-          border: solid white;
-          border-width: 0 2px 2px 0;
-          transform: rotate(45deg);
-        }
-      }
-    }
   }
 }
 
