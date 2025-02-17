@@ -1,6 +1,8 @@
 // Composition Pattern to follow // 1st: Add the logic // When working with
 props in a scrip we use props.etc // In a template we can call the prop directly
 <script setup>
+import { useTasksStore } from '@/stores/tasksStore.js';
+const store = useTasksStore();
 const props = defineProps(['task']);
 </script>
 
@@ -14,7 +16,7 @@ const props = defineProps(['task']);
       {{ task.description }}
     </p>
     <div class="task-check">
-      <input @click="$emit('toggleTaskStatus', task.id)" type="checkbox" :checked="task.completed" />
+      <input @click="store.toggleTaskStatus(task.id)" type="checkbox" :checked="task.completed" />
       <label>{{ task.completed ? 'Done' : 'To-Do' }}</label>
     </div>
   </div>

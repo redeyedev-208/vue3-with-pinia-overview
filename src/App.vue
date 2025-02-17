@@ -9,48 +9,10 @@ import {useTasksStore} from './stores/tasksStore.js';
 const appName = 'Task Manager (Vue 3)';
 const store = useTasksStore();
 
-// When working with reactive, we only target the actual action no need to do a tasks.value.push
-// Meaning we can target the value directly pretty cool stuff
-// From here we go to add the needed directive using v-model
 let newTask = { completed: false };
 
-let filterBy = ref("");
 let modalIsActive = ref(false);
 
-const filteredTasks = computed(() => {
-  switch (filterBy.value) {
-    case 'todo':
-      return store.tasks.filter(task => !task.completed);
-      break;
-    case 'done':
-      return store.tasks.filter(task => task.completed);
-      break;
-    default:
-      return store.tasks;
-  }
-})
-
-function addTask() {
-  if (newTask.name && newTask.description) {
-    newTask.id = Math.max(...store.tasks.map(task => task.id)) + 1;
-    store.tasks.push(newTask);
-    newTask = { completed: false };
-  } else {
-    alert('Please enter title and description for the new task.');
-  }
-}
-
-function toggleTaskStatus(id) {
-  store.tasks.forEach(task => {
-    if (task.id === id) {
-      task.completed = !task.completed;
-    }
-  })
-}
-
-function setFilter(value) {
-  filterBy.value = value;
-}
 </script>
 
 <template>
@@ -66,10 +28,10 @@ function setFilter(value) {
       </div>
     </div>
 
-    <Filter :filterBy="filterBy" @setFilter="setFilter" />
+    <Filter />
 
     <div class="tasks">
-      <Task @toggleTaskStatus="toggleTaskStatus" v-for="(task, index) in filteredTasks" :task="task" :key="index" />
+      <Task v-for="(task, index) in store.filteredTasks" :task="task" :key="index" />
     </div>
 
     <ModalWindow @closeModal="modalIsActive = false" v-if="modalIsActive">
