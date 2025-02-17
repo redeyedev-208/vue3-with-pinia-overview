@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import Task from './components/Task.vue';
 import Filter from './components/Filter.vue';
 
@@ -67,6 +67,19 @@ let newTask = { completed: false };
 
 let filterBy = ref("");
 
+const filteredTasks = computed(() => {
+  switch(filterBy.value) {
+    case 'todo':
+      return tasks.filter(task => !task.completed);
+      break;
+    case 'done':
+      return tasks.filter(task => task.completed);
+      break;
+    default:
+      return tasks;
+  }
+})
+
 function addTask() {
   if (newTask.name && newTask.description) {
     newTask.id = Math.max(...tasks.map(task => task.id)) + 1;
@@ -103,7 +116,7 @@ function setFilter(value) {
     <Filter :filterBy="filterBy" @setFilter="setFilter" />
 
     <div class="tasks">
-      <Task @toggleTaskStatus="toggleTaskStatus" v-for="(task, index) in tasks" :task="task" :key="index" />
+      <Task @toggleTaskStatus="toggleTaskStatus" v-for="(task, index) in filteredTasks" :task="task" :key="index" />
     </div>
 
     <div class="add-task">
