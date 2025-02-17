@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue';
+import { ref, reactive } from 'vue';
 import Task from './components/Task.vue';
 import Filter from './components/Filter.vue';
 
@@ -65,6 +65,8 @@ const appName = 'Task Manager (Vue 3)';
 // From here we go to add the needed directive using v-model
 let newTask = { completed: false };
 
+let filterBy = ref("");
+
 function addTask() {
   if (newTask.name && newTask.description) {
     newTask.id = Math.max(...tasks.map(task => task.id)) + 1;
@@ -82,6 +84,10 @@ function toggleTaskStatus(id) {
     }
   })
 }
+
+function setFilter(value) {
+  filterBy.value = value;
+}
 </script>
 
 <template>
@@ -94,7 +100,7 @@ function toggleTaskStatus(id) {
       </div>
     </div>
 
-    <Filter />
+    <Filter :filterBy="filterBy" @setFilter="setFilter" />
 
     <div class="tasks">
       <Task @toggleTaskStatus="toggleTaskStatus" v-for="(task, index) in tasks" :task="task" :key="index" />
