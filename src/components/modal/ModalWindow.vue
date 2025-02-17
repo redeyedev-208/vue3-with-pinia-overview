@@ -7,16 +7,16 @@ import ModalCloseButton from './ModalCloseButton.vue';
   <div class="modal-wrapper" aria-modal="true" role="dialog" tabindex="-1" aria-labelledby="modal-title">
     <div class="inner">
       <ModalCloseButton @click="$emit('closeModal')" />
-      <h3 id="modal-title">Modal Title</h3>
-      <div class="form">
-        Your Popup Content Goes Here
-      </div>
+      <slot>
+
+      </slot>
+    
     </div>
   </div>
 
 </template>
 
-<style>
+<style lang="scss">
 
 .modal-wrapper {
        position: fixed;

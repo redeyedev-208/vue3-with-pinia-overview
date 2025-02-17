@@ -2,7 +2,8 @@
 import { ref, reactive, computed } from 'vue';
 import Task from './components/Task.vue';
 import Filter from './components/Filter.vue';
-import ModalWindow from './components/ModalWindow.vue';
+import ModalWindow from './components/modal/ModalWindow.vue';
+import AddTaskModal from './components/modal/AddTaskModal.vue';
 
 // Reactive for arrays and objects
 const tasks = reactive([
@@ -114,7 +115,7 @@ function setFilter(value) {
         </h1>
       </div>
       <div class="header-side">
-        <button @click="modalIsActive=true" class="btn secondary">+ Add Task</button>
+        <button @click="modalIsActive = true" class="btn secondary">+ Add Task</button>
       </div>
     </div>
 
@@ -124,15 +125,9 @@ function setFilter(value) {
       <Task @toggleTaskStatus="toggleTaskStatus" v-for="(task, index) in filteredTasks" :task="task" :key="index" />
     </div>
 
-    <div class="add-task">
-      <h3>Add a new task</h3>
-      <input type="text" name="title" v-model="newTask.name" placeholder="Enter a title..." /><br />
-      <textarea v-model="newTask.description" name="description" rows="4" placeholder="Enter a description..." /><br />
-      <button @click="addTask" class="btn gray">
-        Add Task
-      </button>
-    </div>
-    <ModalWindow @closeModal="modalIsActive=false" v-if="modalIsActive" />
+    <ModalWindow @closeModal="modalIsActive = false" v-if="modalIsActive">
+      <AddTaskModal />
+    </ModalWindow>
   </main>
 </template>
 
