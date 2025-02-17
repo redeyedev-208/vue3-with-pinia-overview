@@ -6,53 +6,9 @@ import { ref, reactive, computed } from 'vue';
 // We always need to return an object with the reactive variables and functions
 // So that we can use them in our components
 export const useTasksStore = defineStore('tasks', () => {
-  let tasks = reactive([
-    {
-      name: 'Website design',
-      description:
-        'Define the style guide, branding and create the webdesign on Figma.',
-      completed: true,
-      id: 1,
-    },
-    {
-      name: 'Website development',
-      description: 'Develop the portfolio website using Vue JS.',
-      completed: false,
-      id: 2,
-    },
-    {
-      name: 'Hosting and infrastructure',
-      description:
-        'Define hosting, domain and infrastructure for the portfolio website.',
-      completed: false,
-      id: 3,
-    },
-    {
-      name: 'Composition API',
-      description:
-        'Learn how to use the composition API and how it compares to the options API.',
-      completed: true,
-      id: 4,
-    },
-    {
-      name: 'Pinia',
-      description: 'Learn how to setup a store using Pinia.',
-      completed: true,
-      id: 5,
-    },
-    {
-      name: 'Groceries',
-      description: 'Buy rice, apples and potatos.',
-      completed: false,
-      id: 6,
-    },
-    {
-      name: 'Bank account',
-      description: 'Open a bank account for my freelance business.',
-      completed: false,
-      id: 7,
-    },
-  ]);
+  let tasks = reactive(JSON.parse(localStorage.getItem('tasks')) || []);
+
+  let modalIsActive = ref(false);
 
   let filterBy = ref('');
 
@@ -71,11 +27,13 @@ export const useTasksStore = defineStore('tasks', () => {
     }
   });
 
-  function addTask() {
+  function addTask(newTask) {
     if (newTask.name && newTask.description) {
-      newTask.id = Math.max(...tasks.map((task) => task.id)) + 1;
+      newTask.id = tasks.length
+        ? Math.max(...tasks.map((task) => task.id)) + 1
+        : 1;
       tasks.push(newTask);
-      newTask = { completed: false };
+      closeModal();
     } else {
       alert('Please enter title and description for the new task.');
     }
@@ -89,12 +47,24 @@ export const useTasksStore = defineStore('tasks', () => {
     });
   }
 
+  function openModal() {
+    modalIsActive.value = true;
+  }
+
+  function closeModal() {
+    modalIsActive.value = false;
+  }
+
   return {
     tasks,
+    modalIsActive,
     filterBy,
     setFilter,
     filteredTasks,
     addTask,
     toggleTaskStatus,
+    openModal,
+    closeModal,
+    modalIsActive,
   };
 });

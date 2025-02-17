@@ -2,8 +2,11 @@
 import { useTasksStore } from '@/stores/tasksStore.js';
 const store = useTasksStore();
 
+// Define a method instead of calling store.setFilter directly in the template
+const setFilter = (value) => {
+  store.setFilter(value);
+};
 </script>
-
 
 <template>
   <div class="filters">
@@ -13,12 +16,15 @@ const store = useTasksStore();
         <div @click="store.setFilter('todo')" class="badge" :class="{ selected: store.filterBy === 'todo' }">
           To-Do
         </div>
-        <div @click="store.setFilter('done')" class="badge" :class="{ selected: store.filterBy === 'done' }">Done</div>
+        <div @click="store.setFilter('done')" class="badge" :class="{ selected: store.filterBy === 'done' }">
+          Done
+        </div>
         <span @click="store.setFilter('')" v-if="store.filterBy" class="clear"> x clear </span>
       </div>
     </div>
   </div>
 </template>
+
 
 <style lang="scss" scoped>
 .filters {

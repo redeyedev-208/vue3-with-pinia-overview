@@ -1,5 +1,4 @@
 <script setup>
-import { ref, reactive, computed } from 'vue';
 import Task from './components/Task.vue';
 import Filter from './components/Filter.vue';
 import ModalWindow from './components/modal/ModalWindow.vue';
@@ -9,9 +8,9 @@ import {useTasksStore} from './stores/tasksStore.js';
 const appName = 'Task Manager (Vue 3)';
 const store = useTasksStore();
 
-let newTask = { completed: false };
-
-let modalIsActive = ref(false);
+store.$subscribe((mutation, state) => {
+  localStorage.setItem('tasks', JSON.stringify(state.tasks))
+})
 
 </script>
 
@@ -24,7 +23,7 @@ let modalIsActive = ref(false);
         </h1>
       </div>
       <div class="header-side">
-        <button @click="modalIsActive = true" class="btn secondary">+ Add Task</button>
+        <button @click="store.openModal" class="btn secondary">+ Add Task</button>
       </div>
     </div>
 
@@ -34,7 +33,7 @@ let modalIsActive = ref(false);
       <Task v-for="(task, index) in store.filteredTasks" :task="task" :key="index" />
     </div>
 
-    <ModalWindow @closeModal="modalIsActive = false" v-if="modalIsActive">
+    <ModalWindow v-if="store.modalIsActive">
       <AddTaskModal />
     </ModalWindow>
   </main>
